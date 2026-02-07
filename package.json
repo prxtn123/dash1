@@ -1,5 +1,5 @@
 {
-  "name": "surveillance-aws-project",
+  "name": "node-safety-dashboard",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
