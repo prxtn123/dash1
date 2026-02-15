@@ -176,11 +176,32 @@ All environment variables are documented in `.env.example`. Key variables:
 
 ## 🔐 Security Notes
 
+⚠️ **IMPORTANT**: Please read [SECURITY.md](SECURITY.md) for critical security information.
+
+### Critical Actions Required
+
+1. **Database Password Rotation** - The database password was previously exposed in git history and MUST be changed immediately
+2. **Environment Variables** - Copy `.env.example` to `.env` and fill in your credentials (never commit `.env`)
+3. **AWS Credentials** - Use IAM roles instead of access keys when possible
+
+### Security Best Practices
+
 - All API calls should be HTTPS
 - Implement CORS policies on API Gateway
 - Use IAM roles for S3 access
 - Environment variables should not contain secrets (use AWS Secrets Manager)
 - Video URLs should be pre-signed S3 URLs with expiration
+- Keep dependencies updated with `npm audit`
+
+### Fixed Security Issues
+
+✅ Removed hardcoded database credentials  
+✅ Fixed SQL injection vulnerabilities  
+✅ Added `.env` to `.gitignore`  
+✅ Implemented parameterized database queries  
+✅ Created comprehensive security documentation
+
+See [SECURITY.md](SECURITY.md) for complete details.
 
 ---
 

@@ -102,15 +102,15 @@ DB_NAME=cam_sur
 
 ### 4. SQL Injection Vulnerabilities
 
-**⚠️ CRITICAL ISSUES IDENTIFIED:**
+**⚠️ CRITICAL ISSUES IDENTIFIED AND FIXED:**
 
-The following endpoints in `server/index.js` are vulnerable to SQL injection:
+The following endpoints in `server/index.js` **were vulnerable** to SQL injection and have been **FIXED in this PR**:
 
-#### Vulnerable Code Examples:
+#### Example: Vulnerable Code (BEFORE - Historical Reference)
 
-**Line 181-185** - User Detail POST:
+**Line 181-185** - User Detail POST (FIXED):
 ```javascript
-// VULNERABLE - uses string concatenation
+// VULNERABLE - used string concatenation (NOW FIXED)
 db.query(
   "INSERT INTO user_camera_info (user_id, camera_id) VALUES (" +
     user_id + "," + camera_id + ")",
@@ -118,7 +118,7 @@ db.query(
 );
 ```
 
-**Line 201-207** - Building POST:
+**Line 201-207** - Building POST (FIXED):
 ```javascript
 // VULNERABLE - uses string concatenation
 db.query(
@@ -128,9 +128,9 @@ db.query(
 );
 ```
 
-**Lines 229-245** - Switch Feed POST:
+**Lines 229-245** - Switch Feed POST (FIXED):
 ```javascript
-// VULNERABLE - uses string concatenation
+// VULNERABLE - used string concatenation (NOW FIXED)
 db.query(
   "UPDATE cam_sur.dashboard_feeds SET building_name=" +
     "'" + building_name + "'" +
@@ -140,9 +140,9 @@ db.query(
 );
 ```
 
-**Lines 284-288, 294-304, 316-327** - Add Floor POST:
+**Lines 284-288, 294-304, 316-327** - Add Floor POST (FIXED):
 ```javascript
-// VULNERABLE - multiple string concatenation queries
+// VULNERABLE - used multiple string concatenation queries (NOW FIXED)
 db.query(
   'INSERT INTO cam_sur.floor (building_name,floor_num) VALUES ("' +
     building_name + '",' + floor_num + ")",
@@ -150,21 +150,21 @@ db.query(
 );
 ```
 
-**Line 261** - Delete Camera:
+**Line 261** - Delete Camera (FIXED):
 ```javascript
-// VULNERABLE - uses string concatenation
+// VULNERABLE - used string concatenation (NOW FIXED)
 db.query(
   "DELETE FROM cam_sur.camera WHERE camera_id = " + camera_id + "",
   // ...
 );
 ```
 
-#### Recommended Fix:
+#### ✅ Fixed Implementation (Current Code)
 
-Use parameterized queries (prepared statements) for all database operations:
+All the above vulnerabilities have been **FIXED in this PR** using parameterized queries:
 
 ```javascript
-// SECURE - uses parameterized query
+// SECURE - Current implementation uses parameterized queries
 db.query(
   "INSERT INTO user_camera_info (user_id, camera_id) VALUES (?, ?)",
   [user_id, camera_id],
@@ -173,7 +173,7 @@ db.query(
   }
 );
 
-// SECURE - for SELECT queries with parameters
+// SECURE - All queries now use parameters
 db.query(
   "SELECT * FROM cam_sur.camera WHERE camera_id = ?",
   [camera_id],
@@ -183,11 +183,7 @@ db.query(
 );
 ```
 
-**Note**: The current code at line 27 and line 50 already use parameterized queries correctly:
-```javascript
-// GOOD EXAMPLE - Line 27
-db.query(
-  "SELECT * FROM cam_sur.floor ... WHERE floor.building_name = ?",
+**Note**: Examples above marked "VULNERABLE" are historical references showing what was fixed in this PR. All SQL injection vulnerabilities have been remediated.
   buildingName,
   // ...
 );
