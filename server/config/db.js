@@ -1,11 +1,11 @@
  const mysql=require('mysql');
 
  const db = mysql.createConnection({
-   host:"camsurveillance.czyvcdd36lpu.us-west-2.rds.amazonaws.com",
-   user:"admin",
-   password:"cmpe281*",
-   port:"3306",
-   database:"cam_sur"
+   host: process.env.DB_HOST || "localhost",
+   user: process.env.DB_USER || "root",
+   password: process.env.DB_PASSWORD || "",
+   port: process.env.DB_PORT || "3306",
+   database: process.env.DB_NAME || "cam_sur"
  });
  db.connect(function(err){
    if(err){
