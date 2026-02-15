@@ -1,5 +1,24 @@
 # Security Policy
 
+## ⚠️ CRITICAL SECURITY ALERT
+
+**Database credentials were previously committed to git history!**
+
+The following credentials were exposed in commit `ee63553` and remain in git history:
+- **Database Host**: `camsurveillance.czyvcdd36lpu.us-west-2.rds.amazonaws.com`
+- **Username**: `admin`
+- **Password**: `cmpe281*`
+
+### IMMEDIATE ACTION REQUIRED:
+
+1. ✅ **Credentials removed from code** (fixed in this PR)
+2. ⚠️ **MUST rotate database password immediately**
+3. ⚠️ **MUST review database access logs** for unauthorized access
+4. ⚠️ **Consider rotating RDS instance** if unauthorized access detected
+5. ⚠️ **Credentials remain in git history** - history rewrite would break forks/clones
+
+**Note**: While we've removed the credentials from the current code, they remain in git history. Anyone with access to the repository can still see them in older commits. The database password MUST be changed immediately.
+
 ## Security Issues Fixed
 
 ### Database Credentials
