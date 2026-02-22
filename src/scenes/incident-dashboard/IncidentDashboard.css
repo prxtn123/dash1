@@ -13,50 +13,6 @@
   margin-bottom: 24px;
 }
 
-/* Filter Bar */
-.filter-bar {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 28px;
-}
-
-.filter-btn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.12);
-  background: rgba(255,255,255,0.06);
-  color: #cbd5e1;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 500;
-  transition: all 0.2s;
-}
-
-.filter-btn:hover {
-  background: rgba(255,255,255,0.12);
-  border-color: var(--filter-color, #6b7280);
-  color: #f1f5f9;
-}
-
-.filter-btn.active {
-  background: rgba(255,255,255,0.14);
-  border-color: var(--filter-color, #6b7280);
-  color: #f1f5f9;
-  box-shadow: 0 0 0 1px var(--filter-color, #6b7280);
-}
-
-.filter-count {
-  background: rgba(255,255,255,0.15);
-  border-radius: 20px;
-  padding: 1px 8px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
 
 .dashboard-header-content {
   display: flex;

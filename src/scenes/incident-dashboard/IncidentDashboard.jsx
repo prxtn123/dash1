@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Auth } from 'aws-amplify';
 import IncidentCard from '../../components/IncidentCard';
 import SafetyScorePanel from '../../components/SafetyScorePanel';
-import { fetchIncidents, fetchIncidentStats } from '../../services/mockData';
+import { fetchIncidents } from '../../services/mockData';
 import './IncidentDashboard.css';
 
 /**
@@ -15,7 +15,8 @@ const IncidentDashboard = () => {
 
   const handleSignOut = async () => {
     try {
-      await Auth.signOut();
+      sessionStorage.removeItem('demo_mode');
+      await Auth.signOut().catch(() => {}); // no-op if in demo mode
       navigate('/login');
     } catch (err) {
       console.error('Sign out error:', err);
@@ -23,32 +24,13 @@ const IncidentDashboard = () => {
   };
 
   const [incidents, setIncidents] = useState([]);
-  const [stats, setStats] = useState({
-    totalIncidents: 0,
-    noHighVis: 0,
-    mheClose: 0,
-    walkwayZoning: 0
-  });
-  const [selectedType, setSelectedType] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedIncident, setSelectedIncident] = useState(null);
 
   useEffect(() => {
     loadIncidents();
-    loadStats();
-
-    // TODO: Set up auto-refresh when API is connected
-    // const interval = setInterval(() => {
-    //   loadIncidents();
-    // }, 10000); // Refresh every 10 seconds
-    // return () => clearInterval(interval);
   }, []);
-
-  useEffect(() => {
-    filterIncidents();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedType, incidents]);
 
   const loadIncidents = async () => {
     setLoading(true);
@@ -63,29 +45,6 @@ const IncidentDashboard = () => {
       setLoading(false);
     }
   };
-
-  const loadStats = async () => {
-    try {
-      const data = await fetchIncidentStats();
-      setStats(data);
-    } catch (err) {
-      console.error('Error loading stats:', err);
-    }
-  };
-
-  const filterIncidents = () => {
-    if (!selectedType) return incidents;
-    return incidents.filter(incident => incident.safety_event_type === selectedType);
-  };
-
-  const displayedIncidents = filterIncidents();
-
-  const typeFilters = [
-    { id: 'all', label: 'All Incidents', count: stats.totalIncidents, color: '#6b7280' },
-    { id: 'no-high-vis', label: 'No High-Vis', count: stats.noHighVis, color: '#f97316' },
-    { id: 'mhe-close', label: 'MHE Too Close', count: stats.mheClose, color: '#ef4444' },
-    { id: 'walkway-zoning', label: 'Walkway Zone', count: stats.walkwayZoning, color: '#eab308' }
-  ];
 
   return (
     <div className="incident-dashboard">
@@ -122,21 +81,6 @@ const IncidentDashboard = () => {
       {/* ── Safety Score Panel ── */}
       <SafetyScorePanel />
 
-      {/* ── Incident type filter ── */}
-      <div className="filter-bar">
-        {typeFilters.map(filter => (
-          <button
-            key={filter.id}
-            className={`filter-btn${selectedType === (filter.id === 'all' ? null : filter.id) ? ' active' : ''}`}
-            style={{ '--filter-color': filter.color }}
-            onClick={() => setSelectedType(filter.id === 'all' ? null : filter.id)}
-          >
-            <span className="filter-label">{filter.label}</span>
-            <span className="filter-count">{filter.count}</span>
-          </button>
-        ))}
-      </div>
-
       {/* Incidents Grid */}
       <div className="dashboard-content">
         {loading ? (
@@ -151,19 +95,15 @@ const IncidentDashboard = () => {
               Retry
             </button>
           </div>
-        ) : displayedIncidents.length === 0 ? (
+        ) : incidents.length === 0 ? (
           <div className="empty-state">
             <div className="empty-icon">📭</div>
             <p>No incidents recorded</p>
-            <p className="empty-subtext">
-              {selectedType
-                ? 'Try selecting a different incident type'
-                : 'Great! Your warehouse is operating safely'}
-            </p>
+            <p className="empty-subtext">Great! Your warehouse is operating safely</p>
           </div>
         ) : (
           <div className="incidents-grid">
-            {displayedIncidents.map(incident => (
+            {incidents.map(incident => (
               <IncidentCard
                 key={incident.id}
                 incident={incident}

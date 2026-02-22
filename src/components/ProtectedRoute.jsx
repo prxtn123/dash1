@@ -11,6 +11,11 @@ const ProtectedRoute = ({ children }) => {
   const [status, setStatus] = useState('checking'); // 'checking' | 'ok' | 'denied'
 
   useEffect(() => {
+    // Allow demo bypass (set by "Demo mode" button on login page)
+    if (sessionStorage.getItem('demo_mode') === 'true') {
+      setStatus('ok');
+      return;
+    }
     Auth.currentAuthenticatedUser()
       .then(() => setStatus('ok'))
       .catch(() => setStatus('denied'));

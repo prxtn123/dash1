@@ -240,6 +240,19 @@ const Login = () => {
                 <button className="login-btn" type="submit" disabled={loading}>
                   {loading ? <span className="login-spinner" /> : 'Sign in'}
                 </button>
+
+                <div className="login-divider"><span>or</span></div>
+
+                <button
+                  type="button"
+                  className="login-demo-btn"
+                  onClick={() => {
+                    sessionStorage.setItem('demo_mode', 'true');
+                    navigate('/');
+                  }}
+                >
+                  Continue in demo mode
+                </button>
               </form>
             </>
           )}
