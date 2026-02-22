@@ -8,32 +8,6 @@ import './IncidentCard.css';
 const IncidentCard = ({ incident, onPlayClick }) => {
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const getTypeColor = (type) => {
-    switch (type) {
-      case 'mhe-close':
-        return '#ef4444'; // red
-      case 'no-high-vis':
-        return '#f97316'; // orange
-      case 'walkway-zoning':
-        return '#eab308'; // yellow
-      default:
-        return '#6366f1'; // indigo
-    }
-  };
-
-  const getTypeLabel = (type) => {
-    switch (type) {
-      case 'mhe-close':
-        return 'MHE Too Close';
-      case 'no-high-vis':
-        return 'No High-Vis';
-      case 'walkway-zoning':
-        return 'Walkway Zone';
-      default:
-        return 'Unknown';
-    }
-  };
-
   const handlePlayClick = () => {
     setIsPlaying(true);
     if (onPlayClick) {
@@ -68,10 +42,6 @@ const IncidentCard = ({ incident, onPlayClick }) => {
             controlsList="nodownload"
           />
         )}
-      </div>
-
-      <div className="incident-badge" style={{ backgroundColor: getTypeColor(incident.safety_event_type) }}>
-        {getTypeLabel(incident.safety_event_type)}
       </div>
 
       <div className="incident-content">

@@ -31,7 +31,7 @@ const API_ENDPOINTS = {
 export const mockIncidents = [
   {
     id: '1',
-    video_url: 'https://via.placeholder.com/640x480/1f2937/60a5fa?text=No+High-Vis',
+    video_url: 'https://placehold.co/640x480/1f2937/60a5fa?text=No+High-Vis',
     date: '2026-02-07',
     time: '14:32:45',
     location: 'Warehouse Floor - Zone A',
@@ -41,7 +41,7 @@ export const mockIncidents = [
   },
   {
     id: '2',
-    video_url: 'https://via.placeholder.com/640x480/1f2937/f87171?text=MHE+Close',
+    video_url: 'https://placehold.co/640x480/1f2937/f87171?text=MHE+Too+Close',
     date: '2026-02-07',
     time: '13:15:20',
     location: 'Loading Bay - Section 2',
@@ -51,7 +51,7 @@ export const mockIncidents = [
   },
   {
     id: '3',
-    video_url: 'https://via.placeholder.com/640x480/1f2937/facc15?text=Walkway+Zoning',
+    video_url: 'https://placehold.co/640x480/1f2937/facc15?text=Walkway+Zone',
     date: '2026-02-07',
     time: '12:48:10',
     location: 'Main Aisle - Walkway 3',
@@ -61,7 +61,7 @@ export const mockIncidents = [
   },
   {
     id: '4',
-    video_url: 'https://via.placeholder.com/640x480/1f2937/60a5fa?text=No+High-Vis',
+    video_url: 'https://placehold.co/640x480/1f2937/60a5fa?text=No+High-Vis',
     date: '2026-02-07',
     time: '11:22:55',
     location: 'Packing Station - Area B',
@@ -71,7 +71,7 @@ export const mockIncidents = [
   },
   {
     id: '5',
-    video_url: 'https://via.placeholder.com/640x480/1f2937/f87171?text=MHE+Close',
+    video_url: 'https://placehold.co/640x480/1f2937/f87171?text=MHE+Too+Close',
     date: '2026-02-07',
     time: '10:05:32',
     location: 'Racking Area - Level 2',
@@ -81,7 +81,7 @@ export const mockIncidents = [
   },
   {
     id: '6',
-    video_url: 'https://via.placeholder.com/640x480/1f2937/facc15?text=Walkway+Zoning',
+    video_url: 'https://placehold.co/640x480/1f2937/facc15?text=Walkway+Zone',
     date: '2026-02-06',
     time: '16:42:18',
     location: 'Emergency Exit - Corridor',
