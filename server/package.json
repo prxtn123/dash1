@@ -5,7 +5,9 @@
     "main": "index.js",
     "scripts": {
         "start": "node index.js",
-        "devStart": "nodemon index.js"
+        "devStart": "nodemon index.js",
+        "mock": "node mockServer.js",
+        "mockDev": "nodemon mockServer.js"
     },
     "keywords": [],
     "author": "",

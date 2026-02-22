@@ -56,7 +56,10 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "server": "node server/mockServer.js",
+    "dev": "concurrently --names \"SERVER,CLIENT\" --prefix-colors \"bgGreen.bold,bgBlue.bold\" --kill-others-on-fail \"node server/mockServer.js\" \"react-scripts start\"",
+    "dev:clean": "lsof -ti :3002 | xargs kill -9 2>/dev/null; npm run dev"
   },
   "eslintConfig": {
     "extends": [
@@ -77,6 +80,7 @@
     ]
   },
   "devDependencies": {
+    "concurrently": "^9.2.1",
     "tailwindcss": "^3.3.1"
   }
 }

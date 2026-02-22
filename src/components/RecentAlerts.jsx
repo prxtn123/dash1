@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Typography, useTheme } from "@mui/material";
 import { tokens } from "../theme";
 
-import axios from "axios";
+import { fetchRecentAlerts } from "../services/dashboardApi";
 
 const RecentAlerts = () => {
   const theme = useTheme();
@@ -10,13 +10,8 @@ const RecentAlerts = () => {
   const [recentAlerts, setRecentAlerts] = useState([]);
 
   const getRecentAlerts = async () => {
-    const response = await axios.get(
-      "http://localhost:3002/v1/api/recent-alerts"
-    );
-    //let responsesx = response.data[0]["COUNT(*)"];
-    //console.log(response.data[0]["count_of_zeros"]);
-    console.log("RECENT ALERTS", response.data);
-    setRecentAlerts(response.data);
+    const data = await fetchRecentAlerts();
+    setRecentAlerts(data);
   };
 
   useEffect(() => {

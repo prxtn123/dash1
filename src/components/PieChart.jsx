@@ -2,49 +2,16 @@ import React, { useEffect, useState } from "react";
 import { ResponsivePie } from "@nivo/pie";
 import { tokens } from "../theme";
 import { useTheme } from "@mui/material";
-import {
-  CognitoIdentityProviderClient,
-  ListUsersCommand,
-} from "@aws-sdk/client-cognito-identity-provider";
+import { fetchUserStats } from "../services/dashboardApi";
 
 const PieChart = ({ isDashboard = false }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [users, setUsers] = useState([]);
-  const REGION = process.env.REACT_APP_AWS_REGION;
-  const cognitoClient = new CognitoIdentityProviderClient({
-    region: REGION,
-    credentials: {
-      accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
-      secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
-    },
-  });
 
   const listUsers = async () => {
-    try {
-      const data = await cognitoClient.send(
-        new ListUsersCommand({ UserPoolId: "us-east-1_yZDcfnqL2" })
-      );
-      let adminCount = 0;
-      let nonAdminCount = 0;
-      data.Users.forEach((user) => {
-        const isAdmin = user.Attributes.find(
-          (attr) => attr.Name === "custom:admin" && attr.Value === "true"
-        );
-
-        if (isAdmin) {
-          adminCount++;
-        } else {
-          nonAdminCount++;
-        }
-      });
-      setUsers([
-        { id: "Admin", label: "Adminsitrators", value: adminCount },
-        { id: "Staff", label: "Staff", value: nonAdminCount },
-      ]);
-    } catch (error) {
-      console.error(error);
-    }
+    const data = await fetchUserStats();
+    setUsers(data);
   };
 
   useEffect(() => {

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ResponsivePie } from "@nivo/pie";
 import { tokens } from "../theme";
 import { useTheme } from "@mui/material";
-import axios from "axios";
+import { fetchCameraStatus } from "../services/dashboardApi";
 
 const CameraChart = ({ isDashboard = false }) => {
   const theme = useTheme();
@@ -12,25 +12,8 @@ const CameraChart = ({ isDashboard = false }) => {
   const [cameraData, setCameraData] = useState([]);
 
   const getActiveInactiveCameraData = async () => {
-    const response = await axios.get(
-      "http://localhost:3002/v1/api/inactive-active-cameras"
-    );
-    //let responsesx = response.data[0]["COUNT(*)"];
-    console.log(response.data[0]["count_of_zeros"]);
-    // setInActive(response.data[0]["count_of_zeros"]);
-    //setActive(responsesx);
-    setCameraData([
-      {
-        id: "Inactive",
-        label: "Inactive",
-        value: response.data[0]["count_of_zeros"],
-      },
-      {
-        id: "Active",
-        label: "Active",
-        value: response.data[0]["count_of_ones"],
-      },
-    ]);
+    const data = await fetchCameraStatus();
+    setCameraData(data);
   };
 
   useEffect(() => {

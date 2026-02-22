@@ -1,0 +1,349 @@
+/* =========================================================
+   Login Page — node Safety Platform
+   Matches nodehub.uk brand: dark, premium, cyan accents
+   ========================================================= */
+
+/* ── Page ─────────────────────────────────────────────── */
+.login-page {
+  position: relative;
+  min-height: 100vh;
+  background: #07090f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+/* ── Ambient background orbs ──────────────────────────── */
+.login-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
+}
+.login-orb--cyan {
+  width: 520px;
+  height: 520px;
+  background: rgba(0, 212, 255, 0.09);
+  top: -140px;
+  right: -140px;
+}
+.login-orb--violet {
+  width: 480px;
+  height: 480px;
+  background: rgba(139, 92, 246, 0.08);
+  bottom: -120px;
+  left: -120px;
+}
+.login-orb--green {
+  width: 300px;
+  height: 300px;
+  background: rgba(16, 185, 129, 0.06);
+  bottom: 20%;
+  right: 10%;
+}
+
+/* ── Container ────────────────────────────────────────── */
+.login-container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+/* ── Brand / logo ─────────────────────────────────────── */
+.login-brand {
+  display: flex;
+  align-items: baseline;
+  gap: 1px;
+  margin-bottom: 8px;
+  letter-spacing: -1px;
+}
+.login-wordmark {
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -2px;
+  line-height: 1;
+}
+.login-wordmark-dot {
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: #00d4ff;
+  line-height: 1;
+}
+.login-tagline {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.38);
+  letter-spacing: 0.02em;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+/* ── Card ─────────────────────────────────────────────── */
+.login-card {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 36px 36px 32px;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow:
+    0 0 0 1px rgba(0, 212, 255, 0.06),
+    0 24px 80px rgba(0, 0, 0, 0.5),
+    0 4px 16px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+/* Shimmer top edge */
+.login-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.35), transparent);
+  border-radius: 20px 20px 0 0;
+}
+
+/* ── Card headings ────────────────────────────────────── */
+.login-card-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 4px;
+  letter-spacing: -0.3px;
+}
+.login-card-sub {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0 0 28px;
+  line-height: 1.5;
+}
+
+/* ── Form ─────────────────────────────────────────────── */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.login-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.login-field-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.login-label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+/* ── Input ────────────────────────────────────────────── */
+.login-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 0.95rem;
+  color: #ffffff;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  font-family: inherit;
+}
+.login-input::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+}
+.login-input:focus {
+  border-color: rgba(0, 212, 255, 0.55);
+  background: rgba(0, 212, 255, 0.04);
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+}
+.login-input:-webkit-autofill,
+.login-input:-webkit-autofill:hover,
+.login-input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #0d1117 inset;
+  -webkit-text-fill-color: #ffffff;
+  border-color: rgba(0, 212, 255, 0.3);
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* ── Password input with eye toggle ──────────────────── */
+.login-input-wrap {
+  position: relative;
+}
+.login-input-wrap .login-input {
+  padding-right: 44px;
+}
+.login-eye {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.35);
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+}
+.login-eye:hover { color: rgba(255, 255, 255, 0.7); }
+.login-eye svg { width: 16px; height: 16px; }
+
+/* ── Text links inside form ───────────────────────────── */
+.login-text-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.78rem;
+  color: rgba(0, 212, 255, 0.75);
+  padding: 0;
+  font-family: inherit;
+  transition: color 0.2s;
+}
+.login-text-btn:hover { color: #00d4ff; }
+
+/* ── Password strength rules ──────────────────────────── */
+.login-pwd-rules {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+}
+.pwd-rule {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.3);
+  transition: color 0.2s;
+}
+.pwd-rule.ok {
+  color: #10b981;
+}
+
+/* ── Error / success banners ──────────────────────────── */
+.login-error {
+  font-size: 0.82rem;
+  color: #fca5a5;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 8px;
+  padding: 10px 13px;
+  margin: 0;
+  line-height: 1.5;
+}
+.login-success {
+  font-size: 0.82rem;
+  color: #6ee7b7;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: 8px;
+  padding: 10px 13px;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ── Primary CTA button ───────────────────────────────── */
+.login-btn {
+  width: 100%;
+  padding: 13px;
+  background: linear-gradient(135deg, #00d4ff 0%, #0ea5e9 100%);
+  color: #07090f;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  transition: opacity 0.2s, box-shadow 0.2s, transform 0.15s;
+  box-shadow: 0 0 24px rgba(0, 212, 255, 0.28);
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+}
+.login-btn:hover:not(:disabled) {
+  opacity: 0.92;
+  box-shadow: 0 0 36px rgba(0, 212, 255, 0.42);
+  transform: translateY(-1px);
+}
+.login-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+.login-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ── Loading spinner inside button ────────────────────── */
+.login-spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid rgba(7, 9, 15, 0.35);
+  border-top-color: #07090f;
+  border-radius: 50%;
+  animation: login-spin 0.7s linear infinite;
+}
+@keyframes login-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Back link ────────────────────────────────────────── */
+.login-back-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.84rem;
+  color: rgba(255, 255, 255, 0.4);
+  padding: 4px 0;
+  font-family: inherit;
+  transition: color 0.2s;
+  text-align: center;
+}
+.login-back-btn:hover { color: rgba(255, 255, 255, 0.75); }
+
+/* ── Footer ───────────────────────────────────────────── */
+.login-footer {
+  margin-top: 20px;
+  font-size: 0.76rem;
+  color: rgba(255, 255, 255, 0.22);
+  text-align: center;
+}
+.login-footer a {
+  color: rgba(255, 255, 255, 0.4);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.login-footer a:hover { color: rgba(255, 255, 255, 0.7); }
+
+/* ── Responsive ───────────────────────────────────────── */
+@media (max-width: 480px) {
+  .login-card {
+    padding: 28px 22px 24px;
+    border-radius: 16px;
+  }
+  .login-wordmark,
+  .login-wordmark-dot {
+    font-size: 2rem;
+  }
+}

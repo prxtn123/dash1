@@ -4,7 +4,7 @@ import Header from "../../components/Header";
 import ReactPlayer from "react-player";
 import screenfull from "screenfull";
 import ControlIcons from "../../components/ControlIcons";
-import axios from "axios";
+import { fetchDashboardFeeds } from "../../services/dashboardApi";
 import Container from "@mui/material/Container";
 import PieChart from "../../components/PieChart";
 import CameraChart from "../../components/CameraChart";
@@ -82,7 +82,11 @@ const Dashboard = () => {
   //Destructure State in other to get the values in it
   const { playing, muted, volume, playerbackRate, played, seeking } =
     playerstate;
-  const playerRef = useRef(null);
+  const playerRef1 = useRef(null);
+  const playerRef2 = useRef(null);
+  const playerRef3 = useRef(null);
+  const playerRef4 = useRef(null);
+  const playerRef = playerRef1; // kept for backward-compat with rewind/ff handlers
   const playerDivRef = useRef(null);
 
   //This function handles play and pause onchange button
@@ -195,12 +199,8 @@ const Dashboard = () => {
   }, []);
 
   const getDashboardFeedData = async () => {
-    const response = await axios.get(
-      "http://localhost:3002/v1/api/dashboard-feed"
-    );
-    setDashboardFeed(response.data);
-
-    //console.log("DATA: ", response.data);
+    const data = await fetchDashboardFeeds();
+    setDashboardFeed(data);
   };
 
   //console.log("CHECK CAMERA ID", dashboardFeed[0]);
@@ -230,12 +230,11 @@ const Dashboard = () => {
           <ReactPlayer
             width={"100%"}
             height="100%"
-            ref={playerRef}
-            //url="https://static.videezy.com/system/resources/previews/000/004/298/original/22.mp4"
+            ref={playerRef1}
             url={
               dashboardFeed[0] !== undefined
                 ? dashboardFeed[0]["feed_url"]
-                : "https://static.videezy.com/system/resources/previews/000/041/016/original/alb_tvn0411_1080p.mp4"
+                : "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
             }
             playing={playing}
             volume={volume}
@@ -276,12 +275,11 @@ const Dashboard = () => {
           <ReactPlayer
             width={"100%"}
             height="100%"
-            ref={playerRef}
-            //url="https://static.videezy.com/system/resources/previews/000/004/298/original/22.mp4"
+            ref={playerRef2}
             url={
               dashboardFeed[1] !== undefined
                 ? dashboardFeed[1]["feed_url"]
-                : "https://static.videezy.com/system/resources/previews/000/041/016/original/alb_tvn0411_1080p.mp4"
+                : "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
             }
             playing={playing}
             volume={volume}
@@ -321,15 +319,11 @@ const Dashboard = () => {
           <ReactPlayer
             width={"100%"}
             height="100%"
-            ref={playerRef}
-            //url="https://static.videezy.com/system/resources/previews/000/020/764/original/P1033645.mp4"
-            //url="https://static.videezy.com/system/resources/previews/000/000/402/original/chinatown.mp4"
-            //url="https://media.istockphoto.com/id/1289002194/video/cctv-camera-view-corporate-business-office.mp4?s=mp4-640x640-is&k=20&c=0vq9QxaruoGV-Xmmmua0XhMYPqTyYf1WtPL7t3gqE6U="
-            //url="https://media.istockphoto.com/id/984638344/video/hilo-island-of-hawaii.mp4?s=mp4-640x640-is&k=20&c=D6oQsvsiEKc12ELGVaUVe8aRaj-wXxYAYL03Kqo2KeM="
+            ref={playerRef3}
             url={
               dashboardFeed[2] !== undefined
                 ? dashboardFeed[2]["feed_url"]
-                : "https://static.videezy.com/system/resources/previews/000/041/016/original/alb_tvn0411_1080p.mp4"
+                : "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4"
             }
             playing={playing}
             volume={volume}
@@ -369,12 +363,11 @@ const Dashboard = () => {
           <ReactPlayer
             width={"100%"}
             height="100%"
-            ref={playerRef}
-            //url="https://static.videezy.com/system/resources/previews/000/005/555/original/Times_Square_Wide.mp4"
+            ref={playerRef4}
             url={
               dashboardFeed[3] !== undefined
                 ? dashboardFeed[3]["feed_url"]
-                : "https://static.videezy.com/system/resources/previews/000/041/016/original/alb_tvn0411_1080p.mp4"
+                : "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4"
             }
             playing={playing}
             volume={volume}

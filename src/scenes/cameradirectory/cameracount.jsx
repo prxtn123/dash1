@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { tokens } from "../../theme";
 import { useTheme } from "@mui/material";
 import { Box, Typography } from "@mui/material";
-import axios from "axios";
+import { fetchCameraCount } from "../../services/dashboardApi";
 
 const CameraCount = () => {
   const theme = useTheme();
@@ -11,12 +11,8 @@ const CameraCount = () => {
   const [numberOfCameras, setNumberOfCameras] = useState(null);
 
   const getCameradata = async () => {
-    const response = await axios.get(
-      "http://localhost:3002/v1/api/camera-detail"
-    );
-    let responsesx = response.data[0]["COUNT(*)"];
-
-    setNumberOfCameras(responsesx);
+    const count = await fetchCameraCount();
+    setNumberOfCameras(count);
   };
   useEffect(() => {
     getCameradata();

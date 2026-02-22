@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { tokens } from "../../theme";
 import { useTheme } from "@mui/material";
 import { Box, Typography } from "@mui/material";
-import axios from "axios";
+import { fetchBuildingCount } from "../../services/dashboardApi";
 
 const Totalbuildings = () => {
   const theme = useTheme();
@@ -11,12 +11,8 @@ const Totalbuildings = () => {
   const [numberOfBuildings, setNumberOfBuildings] = useState(null);
 
   const getBuildingData = async () => {
-    const response = await axios.get(
-      "http://localhost:3002/v1/api/building-count"
-    );
-    let responsesx = response.data[0]["COUNT(*)"];
-
-    setNumberOfBuildings(responsesx);
+    const count = await fetchBuildingCount();
+    setNumberOfBuildings(count);
   };
   useEffect(() => {
     getBuildingData();

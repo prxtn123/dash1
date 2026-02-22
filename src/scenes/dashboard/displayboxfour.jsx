@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 
-import axios from "axios";
+import { fetchCameraSelect, fetchDashboardFeeds, switchFeed } from "../../services/dashboardApi";
 import { useState, useEffect } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -28,23 +28,16 @@ const DisplayControlBoxFour = () => {
   }, []);
 
   const getCameraFeedData = async () => {
-    const response = await axios.get(
-      "http://localhost:3002/v1/api/camera-select"
-    );
-    setCameraFeeds(response.data);
+    const data = await fetchCameraSelect();
+    setCameraFeeds(data);
     setUniqueBuildingNames([
-      ...new Set(response.data.map((camera) => camera.building_name)),
+      ...new Set(data.map((camera) => camera.building_name)),
     ]);
-    console.log("DATA: ", response.data);
   };
 
   const getDashboardFeedData = async () => {
-    const response = await axios.get(
-      "http://localhost:3002/v1/api/dashboard-feed"
-    );
-    setDashboardFeed(response.data);
-
-    console.log("DATAxxx: ", response.data);
+    const data = await fetchDashboardFeeds();
+    setDashboardFeed(data);
   };
   const handleBuildingChange_display_four = (event) => {
     setSelectedBuildingDisplayFour(event.target.value);
@@ -95,26 +88,17 @@ const DisplayControlBoxFour = () => {
       console.log("Camera ID " + cameraID);
       console.log("feed " + feedURL);
 
-      fetch("http://localhost:3002/v1/api/switch-feed", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      switchFeed({
           feed_id: 4,
           building_name: selectedBuildingDisplayFour,
           floor_num: selectedFloorDisplayFour,
           camera_id: cameraID,
           camera_loc: selectedLocationDisplayFour,
           feed_url: feedURL,
-        }),
-      })
-        .then((res) => res.json())
-        .then(
-          (result) => {
+        })
+        .then((result) => {
             console.log("RESULT:", result);
-            window.location.reload(false); //reload on building addition
+            window.location.reload(false);
           },
           (error) => {
             console.log("ERROR:", error);

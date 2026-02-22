@@ -1,20 +1,30 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import IncidentDashboard from "./scenes/incident-dashboard/IncidentDashboard";
+import Login from "./scenes/login/Login";
+import ProtectedRoute from "./components/ProtectedRoute";
 import "./App.css";
 
 /**
  * node Safety Dashboard - Main App Component
- * 
- * Simplified routing focused on incident monitoring
- * Authentication to be added later
+ * /login  — public sign-in page
+ * /       — protected dashboard (requires Cognito session)
  */
 function App() {
   return (
     <div className="app">
       <Routes>
-        <Route path="/" element={<IncidentDashboard />} />
-        {/* Add additional routes here as needed */}
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <IncidentDashboard />
+            </ProtectedRoute>
+          }
+        />
+        {/* Catch-all → dashboard (ProtectedRoute will redirect to /login if needed) */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
   );

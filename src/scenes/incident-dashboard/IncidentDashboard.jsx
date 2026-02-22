@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Auth } from 'aws-amplify';
 import IncidentCard from '../../components/IncidentCard';
+import SafetyScorePanel from '../../components/SafetyScorePanel';
 import { fetchIncidents, fetchIncidentStats } from '../../services/mockData';
 import './IncidentDashboard.css';
 
@@ -8,6 +11,17 @@ import './IncidentDashboard.css';
  * Displays safety incidents with filtering by type
  */
 const IncidentDashboard = () => {
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    try {
+      await Auth.signOut();
+      navigate('/login');
+    } catch (err) {
+      console.error('Sign out error:', err);
+    }
+  };
+
   const [incidents, setIncidents] = useState([]);
   const [stats, setStats] = useState({
     totalIncidents: 0,
@@ -75,18 +89,52 @@ const IncidentDashboard = () => {
 
   return (
     <div className="incident-dashboard">
-      {/* Header */}
+
+      {/* ── Background orbs (purely decorative) ── */}
+      <div className="bg-orb bg-orb--cyan"  aria-hidden="true" />
+      <div className="bg-orb bg-orb--violet" aria-hidden="true" />
+      <div className="bg-orb bg-orb--green"  aria-hidden="true" />
+
+      {/* ── Header ── */}
       <div className="dashboard-header">
         <div className="dashboard-header-content">
           <div>
             <h1 className="dashboard-title">Safety Incident Monitor</h1>
-            <p className="dashboard-subtitle">Real-time warehouse safety monitoring powered by node</p>
+            <p className="dashboard-subtitle">Real-time warehouse safety monitoring</p>
           </div>
-          <div className="dashboard-status">
-            <span className="status-dot"></span>
-            <span className="status-text">Live</span>
+          <div className="dashboard-header-right">
+            <div className="dashboard-status">
+              <span className="status-dot"></span>
+              <span className="status-text">Live</span>
+            </div>
+            <button className="signout-btn" onClick={handleSignOut} title="Sign out">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="15" height="15">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+              Sign out
+            </button>
           </div>
         </div>
+      </div>
+
+      {/* ── Safety Score Panel ── */}
+      <SafetyScorePanel />
+
+      {/* ── Incident type filter ── */}
+      <div className="filter-bar">
+        {typeFilters.map(filter => (
+          <button
+            key={filter.id}
+            className={`filter-btn${selectedType === (filter.id === 'all' ? null : filter.id) ? ' active' : ''}`}
+            style={{ '--filter-color': filter.color }}
+            onClick={() => setSelectedType(filter.id === 'all' ? null : filter.id)}
+          >
+            <span className="filter-label">{filter.label}</span>
+            <span className="filter-count">{filter.count}</span>
+          </button>
+        ))}
       </div>
 
       {/* Incidents Grid */}
