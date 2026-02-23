@@ -1,12 +1,12 @@
-# node Safety Dashboard
+# .node Safety Dashboard
 
-**🏭 AI-Powered Warehouse Safety Incident Monitoring**
+** Comouter Vision Warehouse Safety Incident Monitoring**
 
 A modern, premium warehouse safety incident monitoring dashboard. Real-time incident tracking, video evidence, and intelligent alerting for warehouse managers and safety teams.
 
 ---
 
-## 📋 Overview
+## Overview
 
 **node** transforms warehouse safety by providing real-time visibility into safety incidents. The dashboard displays incidents across three main categories:
 
@@ -16,7 +16,7 @@ A modern, premium warehouse safety incident monitoring dashboard. Real-time inci
 
 ---
 
-## 🎯 Quick Start
+## Quick Start
 
 ### Prerequisites
 - Node.js 14+
@@ -104,7 +104,7 @@ public/
 
 ---
 
-## 🎨 Design
+## Design
 
 - **Modern Dark Theme** - Sleek, professional interface
 - **Responsive** - Optimized for desktop, tablet, mobile
@@ -119,7 +119,7 @@ public/
 
 ---
 
-## 🚀 Deployment
+## Deployment
 
 ### AWS Amplify
 ```bash
@@ -137,16 +137,16 @@ docker run -p 3000:3000 node-safety-dashboard
 
 ---
 
-## 📊 Features
+Features
 
-✅ Real-time incident display  
-✅ Video playback for evidence  
-✅ Live incident statistics  
-✅ Smart filtering by incident type  
-✅ Mobile responsive  
-✅ Auto-refresh ready  
-✅ Production AWS integration ready  
-✅ Clean, focused UI
+1. Real-time incident display  
+2. Video playback for evidence  
+3. Live incident statistics  
+4. Smart filtering by incident type  
+5. Mobile responsive  
+6. Auto-refresh ready  
+7. Production AWS integration ready  
+8. Clean, focused UI
 
 ---
 
@@ -180,21 +180,9 @@ All environment variables are documented in `.env.example`. Key variables:
 - Implement CORS policies on API Gateway
 - Use IAM roles for S3 access
 - Environment variables should not contain secrets (use AWS Secrets Manager)
-- Video URLs should be pre-signed S3 URLs with expiration
-
----
-
-## 📞 Support & Questions
-
-- **Documentation**: See [SETUP.md](SETUP.md)
-- **Email**: support@nodehub.uk
-
+- Video URLs should be pre-signed S3 URLs with 
 ---
 
 ## 📄 License
 
 All rights reserved © 2026 node (nodehub.uk)
-
----
-
-**Ready to deploy? Update your API endpoints and launch! 🚀**
