@@ -1,3 +1,6 @@
+// Load environment variables from .env file
+require('dotenv').config({ path: require('path').join(__dirname, '..', '.env') });
+
 const express = require("express");
 const db = require("./config/db");
 const cors = require("cors");
@@ -178,11 +181,8 @@ app.post("/v1/api/user-detail", (req, res) => {
   const user_id = req.body.user_id;
   const camera_id = req.body.camera_id;
   db.query(
-    "INSERT INTO user_camera_info (user_id, camera_id) VALUES (" +
-      user_id +
-      "," +
-      camera_id +
-      ")",
+    "INSERT INTO user_camera_info (user_id, camera_id) VALUES (?, ?)",
+    [user_id, camera_id],
     (err, result) => {
       if (err) {
         return res.status(500).send({});
@@ -198,13 +198,8 @@ app.post("/v1/api/building", (req, res) => {
   const lng = req.body.lng;
 
   db.query(
-    'INSERT INTO cam_sur.building (building_name,lat,lng) VALUES ("' +
-      building_name +
-      '",' +
-      lat +
-      "," +
-      lng +
-      ")",
+    'INSERT INTO cam_sur.building (building_name,lat,lng) VALUES (?, ?, ?)',
+    [building_name, lat, lng],
 
     (error, result) => {
       if (error) {
@@ -226,23 +221,8 @@ app.post("/v1/api/switch-feed", (req, res) => {
   const feed_url = req.body.feed_url;
 
   db.query(
-    "UPDATE cam_sur.dashboard_feeds SET building_name=" +
-      "'" +
-      building_name +
-      "'" +
-      ",floor_num =" +
-      floor_num +
-      ",camera_id =" +
-      camera_id +
-      ",camera_loc=" +
-      "'" +
-      camera_loc +
-      "',feed_url=" +
-      "'" +
-      feed_url +
-      "'" +
-      " WHERE feed_id=" +
-      feed_id,
+    "UPDATE cam_sur.dashboard_feeds SET building_name=?, floor_num=?, camera_id=?, camera_loc=?, feed_url=? WHERE feed_id=?",
+    [building_name, floor_num, camera_id, camera_loc, feed_url, feed_id],
 
     (error, result) => {
       if (error) {
@@ -258,7 +238,8 @@ app.post("/v1/api/switch-feed", (req, res) => {
 app.delete("/v1/api/delete_camera/:camera_id", (req, res) => {
   const camera_id = req.params.camera_id;
   db.query(
-    "DELETE FROM cam_sur.camera WHERE camera_id = " + camera_id + "",
+    "DELETE FROM cam_sur.camera WHERE camera_id = ?",
+    [camera_id],
     (error, result) => {
       if (error) {
         console.log(error);
@@ -281,27 +262,15 @@ app.post("/v1/api/addFloor", (req, res) => {
   const camera_loc = req.body.camera_loc;
   const date_of_installation = req.body.date_of_installation;
   db.query(
-    'INSERT INTO cam_sur.floor (building_name,floor_num) VALUES ("' +
-      building_name +
-      '",' +
-      floor_num +
-      ")",
+    'INSERT INTO cam_sur.floor (building_name,floor_num) VALUES (?, ?)',
+    [building_name, floor_num],
     (error, result) => {
       if (error) {
         console.log(error);
         //res.send({ message: "Error adding floor " });
         db.query(
-          'INSERT INTO cam_sur.camera (building_name,floor_num,camera_name,camera_loc,date_of_installation) VALUES ("' +
-            building_name +
-            '",' +
-            floor_num +
-            ',"' +
-            camera_name +
-            '","' +
-            camera_loc +
-            '",DATE("' +
-            date_of_installation +
-            '"))',
+          'INSERT INTO cam_sur.camera (building_name,floor_num,camera_name,camera_loc,date_of_installation) VALUES (?, ?, ?, ?, DATE(?))',
+          [building_name, floor_num, camera_name, camera_loc, date_of_installation],
           (error, result) => {
             if (error) {
               console.log(error);
@@ -314,17 +283,8 @@ app.post("/v1/api/addFloor", (req, res) => {
       } else {
         res.send({ message: "Floor added successfully" });
         db.query(
-          'INSERT INTO cam_sur.camera (building_name,floor_num,camera_name,camera_loc,date_of_installation) VALUES ("' +
-            building_name +
-            '",' +
-            floor_num +
-            ',"' +
-            camera_name +
-            '","' +
-            camera_loc +
-            '",DATE("' +
-            date_of_installation +
-            '"))',
+          'INSERT INTO cam_sur.camera (building_name,floor_num,camera_name,camera_loc,date_of_installation) VALUES (?, ?, ?, ?, DATE(?))',
+          [building_name, floor_num, camera_name, camera_loc, date_of_installation],
           (error, result) => {
             if (error) {
               console.log(error);
