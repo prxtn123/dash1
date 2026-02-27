@@ -1,4 +1,9 @@
 version: 1
+backend:
+  phases:
+    build:
+      commands:
+        - echo "No backend build - frontend only"
 frontend:
   phases:
     preBuild:
