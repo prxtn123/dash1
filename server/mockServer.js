@@ -18,6 +18,7 @@
 const express = require("express");
 const cors    = require("cors");
 const { SCORING_RULES, computeScore } = require('./config/scoring');
+const { getSafetyScores, getIncidentsForRange, addPresignedUrls } = require('./services/incidentService');
 
 const app = express();
 const PORT = 3002;
@@ -200,14 +201,28 @@ app.get("/v1/api/user-stats", (req, res) => {
   ]);
 });
 
-app.get('/v1/api/safety-scores', (req, res) => {
-  res.json(computeMockScores());
+app.get('/v1/api/safety-scores', async (req, res) => {
+  try {
+    res.json(await getSafetyScores());
+  } catch (err) {
+    console.error('[safety-scores]', err.message);
+    res.json(computeMockScores()); // fallback to 100-baseline if S3 unavailable
+  }
 });
 
 // GET /v1/api/incidents?date=YYYY-MM-DD  (default: today)
-// Returns empty array – real incidents come from S3 CSV files via incidentService.js
-app.get('/v1/api/incidents', (req, res) => {
-  res.json([]);
+app.get('/v1/api/incidents', async (req, res) => {
+  try {
+    const dateStr = req.query.date || new Date().toISOString().slice(0, 10);
+    const start   = new Date(`${dateStr}T00:00:00.000Z`);
+    const end     = new Date(`${dateStr}T23:59:59.999Z`);
+    let incidents = await getIncidentsForRange(start, end);
+    incidents     = await addPresignedUrls(incidents);
+    res.json(incidents);
+  } catch (err) {
+    console.error('[incidents]', err.message);
+    res.json([]);
+  }
 });
 
 // ─── POST / UPDATE routes ─────────────────────────────────────────────────────
