@@ -1,4 +1,5 @@
 import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import { ResponsiveBar } from "@nivo/bar";
 import { tokens } from "../../theme";
 import Header from "../../components/Header";
 import ReactPlayer from "react-player";
@@ -546,6 +547,95 @@ const Dashboard = () => {
           </Box>
         </Box>
         <RecentAlerts />
+        {/* Performance by Shift */}
+        <Box
+          gridColumn="span 8"
+          gridRow="span 2"
+          backgroundColor={colors.primary[400]}
+        >
+          <Box
+            mt="15px"
+            p="0 30px 0 30px"
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Box>
+              <Typography
+                variant="h5"
+                fontWeight="600"
+                color={colors.grey[100]}
+              >
+                Performance by Shift
+              </Typography>
+              <Typography variant="caption" color={colors.greenAccent[500]}>
+                Safety incidents per shift (this week)
+              </Typography>
+            </Box>
+          </Box>
+          <Box height="250px" m="5px 0 0 0">
+            <ResponsiveBar
+              data={[
+                { shift: "Morning", "No High-Vis": 4, "MHE Close": 2, "Walkway": 1 },
+                { shift: "Afternoon", "No High-Vis": 7, "MHE Close": 5, "Walkway": 3 },
+                { shift: "Night", "No High-Vis": 3, "MHE Close": 1, "Walkway": 2 },
+              ]}
+              keys={["No High-Vis", "MHE Close", "Walkway"]}
+              indexBy="shift"
+              margin={{ top: 10, right: 130, bottom: 40, left: 40 }}
+              padding={0.35}
+              groupMode="grouped"
+              valueScale={{ type: "linear" }}
+              colors={[
+                colors.blueAccent[400],
+                colors.redAccent[400],
+                colors.greenAccent[400],
+              ]}
+              theme={{
+                axis: {
+                  domain: { line: { stroke: colors.grey[100] } },
+                  legend: { text: { fill: colors.grey[100] } },
+                  ticks: {
+                    line: { stroke: colors.grey[100], strokeWidth: 1 },
+                    text: { fill: colors.grey[100] },
+                  },
+                },
+                legends: { text: { fill: colors.grey[100] } },
+              }}
+              borderColor={{ from: "color", modifiers: [["darker", 1.6]] }}
+              axisBottom={{
+                tickSize: 5,
+                tickPadding: 5,
+                tickRotation: 0,
+              }}
+              axisLeft={{
+                tickSize: 5,
+                tickPadding: 5,
+                tickRotation: 0,
+              }}
+              enableLabel={false}
+              legends={[
+                {
+                  dataFrom: "keys",
+                  anchor: "bottom-right",
+                  direction: "column",
+                  justify: false,
+                  translateX: 120,
+                  translateY: 0,
+                  itemsSpacing: 2,
+                  itemWidth: 100,
+                  itemHeight: 20,
+                  itemDirection: "left-to-right",
+                  itemOpacity: 0.85,
+                  symbolSize: 12,
+                  effects: [{ on: "hover", style: { itemOpacity: 1 } }],
+                  itemTextColor: colors.grey[100],
+                },
+              ]}
+              role="application"
+            />
+          </Box>
+        </Box>
         {/* <Box
           gridColumn="span 4"
           gridRow="span 2"

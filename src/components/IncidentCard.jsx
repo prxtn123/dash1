@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
 import './IncidentCard.css';
 
+const getRiskLevel = (score) => {
+  if (score >= 75) return { label: 'HIGH RISK', color: '#ef4444', bg: 'rgba(239,68,68,0.15)', border: 'rgba(239,68,68,0.4)' };
+  if (score >= 50) return { label: 'MED RISK',  color: '#f59e0b', bg: 'rgba(245,158,11,0.15)', border: 'rgba(245,158,11,0.4)' };
+  return                 { label: 'LOW RISK',  color: '#10b981', bg: 'rgba(16,185,129,0.15)',  border: 'rgba(16,185,129,0.4)' };
+};
+
 /**
  * IncidentCard Component
  * Displays a single safety incident with video player, metadata, and type badge
  */
-const IncidentCard = ({ incident, onPlayClick }) => {
+const IncidentCard = ({ incident, onPlayClick, isAcknowledged = false, onAcknowledge }) => {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const handlePlayClick = () => {
@@ -15,9 +21,16 @@ const IncidentCard = ({ incident, onPlayClick }) => {
     }
   };
 
+  const risk = incident.risk_score != null ? getRiskLevel(incident.risk_score) : null;
+
   return (
-    <div className="incident-card">
+    <div className={`incident-card${isAcknowledged ? ' incident-card--acked' : ''}`}>
       <div className="incident-video-container">
+        {risk && (
+          <div className="risk-badge" style={{ color: risk.color, background: risk.bg, borderColor: risk.border }}>
+            {risk.label}{incident.risk_score != null ? ` · ${incident.risk_score}` : ''}
+          </div>
+        )}
         {!isPlaying ? (
           <>
             <img
@@ -63,6 +76,14 @@ const IncidentCard = ({ incident, onPlayClick }) => {
         {incident.description && (
           <p className="incident-description">{incident.description}</p>
         )}
+
+        <button
+          className={`acknowledge-btn${isAcknowledged ? ' acknowledge-btn--done' : ''}`}
+          onClick={() => !isAcknowledged && onAcknowledge && onAcknowledge(incident.id)}
+          disabled={isAcknowledged}
+        >
+          {isAcknowledged ? '✓ Acknowledged' : 'Acknowledge'}
+        </button>
       </div>
     </div>
   );

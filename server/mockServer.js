@@ -16,21 +16,59 @@
  */
 
 const express = require("express");
-const cors = require("cors");
+const cors    = require("cors");
+const { SCORING_RULES, computeScore } = require('./config/scoring');
 
 const app = express();
 const PORT = 3002;
 
-app.use(cors());
+app.use(cors({ origin: process.env.CORS_ORIGIN || 'http://localhost:3000' }));
 app.use(express.json());
 
 // ─── Demo Video URLs ──────────────────────────────────────────────────────────
 const DEMO_VIDEOS = [
-  "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-  "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-  "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4",
-  "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+  "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+  "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+  "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4",
+  "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
 ];
+
+// ─── Date helpers ──────────────────────────────────────────────────────────
+const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+function startOfDay(d)  { const r = new Date(d); r.setHours(0,0,0,0); return r; }
+function startOfWeek(d) {
+  const r = new Date(d); r.setHours(0,0,0,0);
+  const day = r.getDay();
+  r.setDate(r.getDate() - (day === 0 ? 6 : day - 1));
+  return r;
+}
+function startOfMonth(d) { return new Date(d.getFullYear(), d.getMonth(), 1); }
+function getShift(ts) {
+  const h = new Date(ts).getUTCHours();
+  return h >= 6 && h < 14 ? 'morning' : h >= 14 && h < 22 ? 'afternoon' : 'night';
+}
+
+// ─── Incident data: empty – real data comes from S3 CSV files ─────────────────
+const mockIncidents = [];
+
+function computeMockScores() {
+  const now     = new Date();
+  const history = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(now);
+    d.setDate(d.getDate() - (6 - i));
+    return { label: DAY_NAMES[d.getDay()], score: 100 };
+  });
+  return {
+    today: 100, week: 100, month: 100,
+    today_delta: 0, week_delta: 0, month_delta: 0,
+    history,
+    uk_market_avg: 74,
+    uk_percentile: 99,
+    internal_avg:  100,
+    site_rank:     1,
+    total_sites:   1,
+  };
+}
 
 // ─── In-Memory Data Store ─────────────────────────────────────────────────────
 const buildings = [
@@ -162,29 +200,14 @@ app.get("/v1/api/user-stats", (req, res) => {
   ]);
 });
 
-app.get("/v1/api/safety-scores", (req, res) => {
-  res.json({
-    today: 87,
-    week: 82,
-    month: 79,
-    today_delta: 5,
-    week_delta: 3,
-    month_delta: -2,
-    history: [
-      { label: "Mon", score: 78 },
-      { label: "Tue", score: 81 },
-      { label: "Wed", score: 85 },
-      { label: "Thu", score: 83 },
-      { label: "Fri", score: 88 },
-      { label: "Sat", score: 90 },
-      { label: "Sun", score: 87 },
-    ],
-    uk_market_avg: 74,
-    uk_percentile: 85,
-    internal_avg: 81,
-    site_rank: 3,
-    total_sites: 12,
-  });
+app.get('/v1/api/safety-scores', (req, res) => {
+  res.json(computeMockScores());
+});
+
+// GET /v1/api/incidents?date=YYYY-MM-DD  (default: today)
+// Returns empty array – real incidents come from S3 CSV files via incidentService.js
+app.get('/v1/api/incidents', (req, res) => {
+  res.json([]);
 });
 
 // ─── POST / UPDATE routes ─────────────────────────────────────────────────────

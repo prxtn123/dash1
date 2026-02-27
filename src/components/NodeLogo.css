@@ -1,0 +1,43 @@
+.node-logo {
+  display: inline-flex;
+  align-items: baseline;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  user-select: none;
+}
+
+/* ── Small (default – app headers) ── */
+.node-logo--sm .node-logo-wordmark {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+.node-logo--sm .node-logo-dot {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #00d4ff;
+}
+
+/* ── Medium ── */
+.node-logo--md .node-logo-wordmark {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+.node-logo--md .node-logo-dot {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #00d4ff;
+}
+
+/* ── Large ── */
+.node-logo--lg .node-logo-wordmark {
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+.node-logo--lg .node-logo-dot {
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: #00d4ff;
+}

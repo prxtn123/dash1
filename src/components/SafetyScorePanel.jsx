@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { fetchSafetyScores } from '../services/dashboardApi';
+import { fetchSafetyScores, MOCK } from '../services/dashboardApi';
 import './SafetyScorePanel.css';
 
 // ─── Sparkline SVG ────────────────────────────────────────────────────────────
@@ -93,12 +93,16 @@ const PERIODS = [
 ];
 
 // ─── Main Component ───────────────────────────────────────────────────────────
-const SafetyScorePanel = () => {
+const SafetyScorePanel = ({ onScoreClick }) => {
   const [scores,    setScores]    = useState(null);
   const [periodIdx, setPeriodIdx] = useState(0);
   const [animVal,   setAnimVal]   = useState(0);
 
-  useEffect(() => { fetchSafetyScores().then(setScores); }, []);
+  useEffect(() => {
+    fetchSafetyScores()
+      .then(setScores)
+      .catch(() => setScores(MOCK.safetyScores));
+  }, []);
 
   const period       = PERIODS[periodIdx];
   const currentScore = scores ? scores[period.key]      : 0;
@@ -139,14 +143,19 @@ const SafetyScorePanel = () => {
     <div className="score-panel">
 
       {/* ── Card 1: Safety Score ── */}
-      <div className="score-card score-card--primary" style={{ '--accent': scoreColor }}>
+      <div
+        className="score-card score-card--primary"
+        style={{ '--accent': scoreColor, cursor: onScoreClick ? 'pointer' : 'default' }}
+        onClick={onScoreClick}
+        title={onScoreClick ? 'Click for full breakdown' : undefined}
+      >
         <div className="score-card__eyebrow">Safety Score</div>
 
         <div className="score-period-tabs">
           {PERIODS.map((p, i) => (
             <button key={p.key}
               className={`score-tab ${periodIdx === i ? 'score-tab--active' : ''}`}
-              onClick={() => setPeriodIdx(i)}>
+              onClick={(e) => { e.stopPropagation(); setPeriodIdx(i); }}>
               {p.label}
             </button>
           ))}

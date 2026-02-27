@@ -58,14 +58,36 @@
   backdrop-filter: blur(10px);
 }
 
+/* Nav buttons (Map, Team) */
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #9ca3af;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.nav-btn:hover {
+  background: rgba(0, 212, 255, 0.1);
+  border-color: rgba(0, 212, 255, 0.3);
+  color: #00d4ff;
+}
+
 /* Sign-out button */
 .signout-btn {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 10px 14px;
+  padding: 8px 14px;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   color: rgba(255, 255, 255, 0.5);
   font-size: 0.8rem;
@@ -107,7 +129,294 @@
   color: #10b981;
 }
 
-/* Stats Grid */
+/* Refresh Countdown */
+.refresh-countdown {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  background: rgba(96, 165, 250, 0.08);
+  border: 1px solid rgba(96, 165, 250, 0.2);
+  border-radius: 8px;
+  color: rgba(96, 165, 250, 0.8);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  font-family: 'Courier New', monospace;
+}
+
+/* Export CSV Button */
+.export-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  background: rgba(52, 211, 153, 0.08);
+  border: 1px solid rgba(52, 211, 153, 0.3);
+  border-radius: 8px;
+  color: #34d399;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: 0.02em;
+  transition: background 0.2s, border-color 0.2s;
+  white-space: nowrap;
+}
+.export-btn:hover {
+  background: rgba(52, 211, 153, 0.18);
+  border-color: rgba(52, 211, 153, 0.6);
+}
+
+/* ── Shift Heatmap ────────────────────────────────────────────────────── */
+.heatmap-section {
+  margin-top: 40px;
+  padding: 28px;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.8) 100%);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+}
+
+.heatmap-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0 0 24px 0;
+  letter-spacing: -0.2px;
+}
+
+.heatmap-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.heatmap-header-row,
+.heatmap-row {
+  display: grid;
+  grid-template-columns: 110px repeat(7, 1fr);
+  gap: 6px;
+  align-items: center;
+}
+
+.heatmap-day-label {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.heatmap-shift-cell {
+  /* placeholder width column */
+}
+
+.heatmap-shift-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #94a3b8;
+  white-space: nowrap;
+}
+
+.heatmap-cell {
+  height: 44px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+  transition: transform 0.15s ease, filter 0.15s ease;
+  border: 1px solid rgba(239, 68, 68, 0.15);
+}
+.heatmap-cell:hover {
+  transform: scale(1.08);
+  filter: brightness(1.3);
+  z-index: 1;
+}
+
+.heatmap-count {
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+}
+
+.heatmap-legend {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+.heatmap-legend-label {
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 600;
+}
+.heatmap-legend-bar {
+  flex: 1;
+  height: 8px;
+  border-radius: 4px;
+  background: linear-gradient(to right, rgba(239,68,68,0.06), rgba(239,68,68,1));
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .heatmap-section {
+    padding: 16px;
+    margin-top: 24px;
+  }
+  .heatmap-header-row,
+  .heatmap-row {
+    grid-template-columns: 80px repeat(7, 1fr);
+    gap: 4px;
+  }
+  .heatmap-cell {
+    height: 34px;
+  }
+  .heatmap-count {
+    font-size: 11px;
+  }
+  .heatmap-shift-label {
+    font-size: 11px;
+  }
+  .refresh-countdown,
+  .export-btn {
+    padding: 8px 10px;
+    font-size: 0.75rem;
+  }
+}
+
+/* Stats Grid (used for KPI tiles) */
+
+/* Incident Type Chart */
+.type-chart-section {
+  background: linear-gradient(135deg, rgba(30,41,59,0.8) 0%, rgba(15,23,42,0.8) 100%);
+  border: 1px solid rgba(148,163,184,0.15);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.type-chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.type-chart-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0;
+}
+
+.type-chart-link {
+  background: none;
+  border: none;
+  color: #60a5fa;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: color 0.2s;
+  padding: 0;
+}
+.type-chart-link:hover { color: #93c5fd; }
+
+.type-bar-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+  margin-bottom: 16px;
+  cursor: pointer;
+  padding: 12px;
+  border-radius: 10px;
+  transition: background 0.2s;
+  border: 1px solid transparent;
+}
+.type-bar-row:hover {
+  background: rgba(255,255,255,0.04);
+  border-color: rgba(255,255,255,0.08);
+}
+
+.type-bar-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.type-bar-label {
+  font-size: 14px;
+  color: #cbd5e1;
+  font-weight: 500;
+  flex: 1;
+}
+
+.type-bar-count {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.type-bar-track {
+  height: 8px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.type-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.8s ease;
+}
+
+/* Clickable heatmap cell */
+.heatmap-cell--clickable {
+  cursor: pointer;
+}
+.heatmap-cell--clickable:hover {
+  transform: scale(1.12) !important;
+  filter: brightness(1.4) !important;
+  outline: 2px solid rgba(255,255,255,0.3);
+  z-index: 2;
+}
+
+/* Heatmap footer */
+.heatmap-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.heatmap-footer-hint {
+  font-size: 12px;
+  color: #475569;
+  font-style: italic;
+}
+
+.heatmap-view-all {
+  background: rgba(96,165,250,0.08);
+  border: 1px solid rgba(96,165,250,0.25);
+  border-radius: 8px;
+  color: #60a5fa;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+.heatmap-view-all:hover {
+  background: rgba(96,165,250,0.16);
+}
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));

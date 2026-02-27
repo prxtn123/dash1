@@ -17,10 +17,10 @@ const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:3002";
 // ─── Demo / Fallback Video URLs ───────────────────────────────────────────────
 // Reliable Google-hosted MP4s – swap in real RTSP/HLS streams when ready.
 const DEMO_VIDEOS = [
-  "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-  "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-  "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4",
-  "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+  "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+  "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+  "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4",
+  "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
 ];
 
 // ─── Mock / Fallback Data ─────────────────────────────────────────────────────
@@ -92,33 +92,28 @@ export const MOCK = {
     { id: "Staff", label: "Staff",          value: 12 },
   ],
 
+  // No incidents yet – score starts at 100.
+  // This value is only used when the server is completely unreachable.
   safetyScores: {
-    today: 87,
-    week: 82,
-    month: 79,
-    today_delta: 5,
-    week_delta: 3,
-    month_delta: -2,
+    today: 100, week: 100, month: 100,
+    today_delta: 0, week_delta: 0, month_delta: 0,
     history: [
-      { label: "Mon", score: 78 },
-      { label: "Tue", score: 81 },
-      { label: "Wed", score: 85 },
-      { label: "Thu", score: 83 },
-      { label: "Fri", score: 88 },
-      { label: "Sat", score: 90 },
-      { label: "Sun", score: 87 },
+      { label: 'Mon', score: 100 }, { label: 'Tue', score: 100 },
+      { label: 'Wed', score: 100 }, { label: 'Thu', score: 100 },
+      { label: 'Fri', score: 100 }, { label: 'Sat', score: 100 },
+      { label: 'Sun', score: 100 },
     ],
     uk_market_avg: 74,
-    uk_percentile: 85,
-    internal_avg: 81,
-    site_rank: 3,
-    total_sites: 12,
+    uk_percentile: 99,
+    internal_avg: 100,
+    site_rank: 1,
+    total_sites: 1,
   },
 };
 
-// ─── Internal helper ──────────────────────────────────────────────────────────
-const get = (path) =>
-  axios.get(`${BASE_URL}${path}`).then((r) => r.data);
+// ─── Internal helpers ────────────────────────────────────────────────────────
+const get  = (path)         => axios.get (`${BASE_URL}${path}`).then((r) => r.data);
+const post = (path, data)   => axios.post(`${BASE_URL}${path}`, data).then((r) => r.data);
 
 // ─── Public API Functions ─────────────────────────────────────────────────────
 
@@ -202,17 +197,36 @@ export const fetchSafetyScores = async () => {
   }
 };
 
+/**
+ * Fetch incidents for a given date (default: today).
+ * @param {Object} [filters]  Optional { date: 'YYYY-MM-DD', type: string, shift: string }
+ */
+export const fetchIncidents = async (filters = null) => {
+  try {
+    const params = new URLSearchParams();
+    if (filters?.date) params.set('date', filters.date);
+    const query = params.toString();
+    const data  = await get(`/v1/api/incidents${query ? '?' + query : ''}`);
+    return applyIncidentFilters(data, filters);
+  } catch {
+    console.warn('[API] incidents unavailable – returning empty list');
+    return [];
+  }
+};
+
+function applyIncidentFilters(incidents, filters) {
+  if (!filters) return incidents;
+  let result = incidents;
+  if (filters.type)  result = result.filter(i =>
+    i.safety_event_type === filters.type || i.group === filters.type
+  );
+  if (filters.shift) result = result.filter(i => i.shift === filters.shift);
+  return result;
+}
+
 export const switchFeed = async (payload) => {
   try {
-    const res = await fetch(`${BASE_URL}/v1/api/switch-feed`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
-    return res.json();
+    return await post("/v1/api/switch-feed", payload);
   } catch {
     console.warn("[API] switch-feed unavailable – returning mock success");
     return { message: "Feed updated (demo mode)" };

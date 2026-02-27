@@ -7,8 +7,6 @@ import { fetchCameraStatus } from "../services/dashboardApi";
 const CameraChart = ({ isDashboard = false }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [inactive, setInActive] = useState(null);
-  const [active, setActive] = useState(null);
   const [cameraData, setCameraData] = useState([]);
 
   const getActiveInactiveCameraData = async () => {
@@ -19,18 +17,6 @@ const CameraChart = ({ isDashboard = false }) => {
   useEffect(() => {
     getActiveInactiveCameraData();
   }, []);
-
-  //   useEffect(() => {
-  //     getInactiveCameraData();
-  //     getActiveCameraData();
-  //     setData([
-  //         { id: "Admin", label: "Adminsitrators", value: adminCount },
-  //         { id: "Staff", label: "Staff", value: nonAdminCount },
-  //       ]);
-  //   }, []);
-
-  //   console.log("number of active cameras", active);
-  //   console.log("number of inactive cameras", inactive);
 
   return (
     <ResponsivePie
